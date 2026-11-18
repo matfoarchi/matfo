@@ -627,19 +627,19 @@ const PROJECTS = {
 
 /* 5. PRICING. Copied from your Whop page. Edit prices, names and features here. */
 const TIERS = [
-  { id: "blueprint", price: "$97", name: "Self-Paced Blueprint", popular: false,
-    features: ["5 week schedule templates", "Milestone planning framework", "Triage guide for when the brief shifts", "Weekly one page self audit sheet"] },
-  { id: "system", price: "$200", name: "The Studio Life System", popular: true,
-    features: ["Everything in the Blueprint", "Five weekly live mentoring sessions", "Peer review of your boards before crit day", "Weekly tracking of sleep, training and deadlines"] },
-  { id: "vip", price: "$497", name: "Studio VIP Accelerator", popular: false,
-    features: ["Everything in the System", "Two private 1 to 1 calls", "Critique of final sheets and portfolio", "Direct messaging for deadline triage"] }
+  { id: "starter", price: "$139", name: "Mentoring Starter", popular: false,
+    features: ["3 one-on-one calls of 60 minutes", "Start, middle and end of the 5 weeks", "Schedule template included"] },
+  { id: "mentoring", price: "$250", name: "Mentoring", popular: true,
+    features: ["One 60 minute call every week for 5 weeks", "Goals, mindset, health, projects, reflection", "Weekly journal with my feedback", "Adjusted to you"] },
+  { id: "premium", price: "$379", name: "Mentoring Premium", popular: false,
+    features: ["Fully custom", "Up to 8 one-on-one calls", "You pick the topics and the timing"] }
 ];
 
 /* 5b. WHOP CHECKOUT. Paste the Plan ID of each tier (looks like plan_XXXXXXXXX).
        Find it in Whop under Checkout Links, three dots, Details.
        Empty means no payment step. The application is only sent by email.
        WHOP_SANDBOX true is for test payments with sandbox.whop.com plans. */
-const WHOP_PLANS = { blueprint: "plan_SLSw42YeWvtoY", system: "plan_C9zlBERhxrGDo", vip: "plan_0nD1rCFL8XawW" };
+const WHOP_PLANS = { starter: "plan_VrN7ER8oXfDyF", mentoring: "plan_VvvTFMMeSD2pb", premium: "plan_xpwLi85rFEyST" };
 const WHOP_SANDBOX = false;
 /* "redirect" sends the buyer to Whop's own checkout page and back to this site.
    "embed" shows the Whop checkout inside the page. Redirect is the safe one.
@@ -647,6 +647,7 @@ const WHOP_SANDBOX = false;
 const WHOP_MODE = "redirect";
 const SITE_URL = "https://matfoarchi.github.io/matfo/";
 const PAID_TITLE = "Let's design something great together.";
+const BOOKING_NOTE = "Check your email. Whop sends you a link to your account. That is where you book your first call.";
 const REFUND_NOTE = "I review every application after payment. If yours is not the right fit, or all spots are taken, you get a full refund.";
 
 /* 6. APPLICATION QUESTIONS. type is text, email, age, long, choice, tier or yesno. */
@@ -876,7 +877,7 @@ const App=(function(){
   function qNode(q,idx){const d=document.createElement("div");d.className="q";let f="";
     const v=ans[q.id]||"";
     if(q.type==="long")f=`<textarea id="qf" rows="4" maxlength="1500" placeholder="${esc(q.ph||"Type here")}">${esc(v)}</textarea>`;
-    else if(q.type==="choice"||q.type==="yesno"||q.type==="tier"){const o=q.type==="yesno"?["Yes","No"].map(x=>[x,x,""]):q.type==="tier"?TIERS.map(t=>[t.id,t.name,t.price]):q.options.map(x=>[x,x,""]);
+    else if(q.type==="choice"||q.type==="yesno"||q.type==="tier"){const o=q.type==="yesno"?["Yes","No"].map(x=>[x,x,""]):q.type==="tier"?TIERS.map(t=>[t.id,t.name+" "+t.price,""]):q.options.map(x=>[x,x,""]);
       f=`<div class="opts" role="radiogroup">${o.map(x=>`<button type="button" role="radio" aria-checked="${v===x[0]}" class="opt${v===x[0]?" on":""}" data-v="${esc(x[0])}"><span>${esc(x[1])}</span><small>${esc(x[2])}</small></button>`).join("")}</div>`}
     else f=`<input id="qf" type="${q.type==="email"?"email":"text"}" ${q.type==="age"?'inputmode="numeric" maxlength="2"':""} ${q.type==="email"?'inputmode="email" autocapitalize="off" spellcheck="false"':""} autocomplete="${q.auto||"off"}" maxlength="140" placeholder="${esc(q.ph||"Type here")}" value="${esc(v)}">`;
     d.innerHTML=`<div class="qi"><span class="cap">Question ${String(idx+1).padStart(2,"0")}</span><label class="D q-l" for="qf">${esc(q.q)}</label>${q.sub?`<p class="q-s">${esc(q.sub)}</p>`:""}${f}<p class="q-e" role="alert"></p></div>`;
@@ -918,7 +919,7 @@ const App=(function(){
       if(WHOP_PLANS[tier])pay(tier,mail);else endNode("Thank you.","Thank you for your interest. I read every application. If your answers are a good fit, I will get back to you.",`<button class="btn" data-act="close">Close</button>`)}
     catch(e){mode="fail";endNode("Not sent.",`Something broke on the way. Your answers are safe. Try again or send them by email${toMail}.`,
       `<button class="btn" data-act="retry">Try again</button>`+mailBtn("Send by email")+`<button class="btn" data-act="copy">Copy answers</button><button class="btn" data-act="back">Back</button>`)}}
-  function paid(){mode="done";endNode(esc(PAID_TITLE),esc(REFUND_NOTE)+" A receipt is on its way to your email.",`<button class="btn" data-act="close">Close</button>`,true)}
+  function paid(){mode="done";endNode(esc(PAID_TITLE),esc(BOOKING_NOTE)+"<br><br>"+esc(REFUND_NOTE),`<button class="btn" data-act="close">Close</button>`,true)}
   function pay(tier,mail){mode="pay";const plan=WHOP_PLANS[tier],d=document.createElement("div");d.className="q";
     if(WHOP_MODE==="redirect"){const url="https://"+(WHOP_SANDBOX?"sandbox.":"")+"whop.com/checkout/"+plan;
       d.innerHTML=`<div class="qi"><span class="cap">Application sent. Last step</span><h3 class="D q-l">Secure your spot.</h3><p class="q-s">${esc(tierName(tier))}. ${esc(REFUND_NOTE)}</p><p class="q-s">Payment opens on Whop. It is secure. You come back here after.</p><div class="end-b"><a class="btn" href="${esc(url)}">Pay now</a><button class="btn" data-act="close">Close</button></div></div>`;
