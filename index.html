@@ -541,7 +541,7 @@ html.cur,html.cur *{cursor:none!important}
   <div class="app-bar"><i id="appProg"></i></div>
   <div class="app-top"><span class="cap" id="appCount">01 / 16</span><span class="cap">Application</span><button class="cap" id="appClose">Close</button></div>
   <div class="app-stage" id="appStage"></div>
-  <div class="app-nav"><button id="appBack">Back</button><span class="cap hint">Press Enter</span><button class="next" id="appNext">Next</button></div>
+  <div class="app-nav"><button id="appBack">Back</button><button class="next" id="appNext">Next</button></div>
 </div>
 
 <script>/* Image data. Do not edit by hand. */
@@ -632,11 +632,11 @@ const PROJECTS = {
 /* 5. PRICING. Copied from your Whop page. Edit prices, names and features here. */
 const TIERS = [
   { id: "starter", price: "$139", name: "Mentoring Starter", popular: false,
-    features: ["3 one-on-one calls of 60 minutes", "Start, middle and end of the 5 weeks", "Schedule template included"] },
+    features: ["3 one-on-one sessions, 60 minutes each", "One at the start, one in the middle, one at the end", "Schedule template included", "No weekly journal"] },
   { id: "mentoring", price: "$250", name: "Mentoring", popular: true,
-    features: ["One 60 minute call every week for 5 weeks", "Goals, mindset, health, projects, reflection", "Weekly journal with my feedback", "Adjusted to you"] },
+    features: ["5 weeks, one 60 minute session every week", "Week 1. Goals, ambitions and schedule", "Week 2. Creative mindset", "Week 3. Physical health", "Week 4. Projects", "Week 5. Final reflection", "Weekly journal with my feedback", "Adjusted to your liking"] },
   { id: "premium", price: "$379", name: "Mentoring Premium", popular: false,
-    features: ["Fully custom", "Up to 8 one-on-one calls", "You pick the topics and the timing"] }
+    features: ["Fully custom, made to your liking", "Up to 8 one-on-one meetings", "You pick the topics and the timing"] }
 ];
 
 /* 5b. WHOP CHECKOUT. Paste the Plan ID of each tier (looks like plan_XXXXXXXXX).
