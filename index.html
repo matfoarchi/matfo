@@ -283,6 +283,7 @@ html.cur,html.cur *{cursor:none!important}
 .rev .a{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
 .end-t{font-size:min(24vw,34svh);margin-bottom:22px}
 .end-p{max-width:46ch;font-size:13px}
+.btn.inv{background:#fff;color:#000}
 .end-t.sm{font-size:clamp(46px,9.5vw,130px)}
 .pay{margin-top:20px;min-height:420px;border:1px solid #fff}
 .end-b{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
@@ -651,7 +652,9 @@ const WHOP_SANDBOX = false;
 const WHOP_MODE = "redirect";
 const SITE_URL = "https://matfoarchi.github.io/matfo/";
 const PAID_TITLE = "Let's design something great together.";
-const BOOKING_NOTE = "Check your email. The link to book your first call is in it.";
+/* Google Calendar booking page. Shown on the thank-you screen after payment. */
+const BOOKING_URL = "https://calendar.app.google/xivFntLDpC93Aqq19";
+const BOOKING_NOTE = "Book your first call now. The link is also in your Whop messages.";
 const REFUND_NOTE = "I review every application after payment. If yours is not the right fit, or all spots are taken, you get a full refund.";
 
 /* 6. APPLICATION QUESTIONS. type is text, email, age, long, choice, tier or yesno. */
@@ -923,7 +926,7 @@ const App=(function(){
       if(WHOP_PLANS[tier])pay(tier,mail);else endNode("Thank you.","Thank you for your interest. I read every application. If your answers are a good fit, I will get back to you.",`<button class="btn" data-act="close">Close</button>`)}
     catch(e){mode="fail";endNode("Not sent.",`Something broke on the way. Your answers are safe. Try again or send them by email${toMail}.`,
       `<button class="btn" data-act="retry">Try again</button>`+mailBtn("Send by email")+`<button class="btn" data-act="copy">Copy answers</button><button class="btn" data-act="back">Back</button>`)}}
-  function paid(){mode="done";endNode(esc(PAID_TITLE),esc(BOOKING_NOTE)+"<br><br>"+esc(REFUND_NOTE),`<button class="btn" data-act="close">Close</button>`,true)}
+  function paid(){mode="done";endNode(esc(PAID_TITLE),esc(BOOKING_NOTE)+"<br><br>"+esc(REFUND_NOTE),(BOOKING_URL?`<a class="btn inv" href="${esc(BOOKING_URL)}" target="_blank" rel="noopener">Book your first call</a>`:"")+`<button class="btn" data-act="close">Close</button>`,true)}
   function pay(tier,mail){mode="pay";const plan=WHOP_PLANS[tier],d=document.createElement("div");d.className="q";
     if(WHOP_MODE==="redirect"){const url="https://"+(WHOP_SANDBOX?"sandbox.":"")+"whop.com/checkout/"+plan;
       d.innerHTML=`<div class="qi"><span class="cap">Application sent. Last step</span><h3 class="D q-l">Secure your spot.</h3><p class="q-s">${esc(tierName(tier))}. ${esc(REFUND_NOTE)}</p><p class="q-s">Payment opens on Whop. It is secure. You come back here after.</p><div class="end-b"><a class="btn" href="${esc(url)}">Pay now</a><button class="btn" data-act="close">Close</button></div></div>`;
