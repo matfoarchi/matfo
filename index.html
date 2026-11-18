@@ -283,6 +283,7 @@ html.cur,html.cur *{cursor:none!important}
 .rev .a{font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}
 .end-t{font-size:min(24vw,34svh);margin-bottom:22px}
 .end-p{max-width:46ch;font-size:13px}
+.card .was{display:block;margin:-4px 0 10px}
 .btn.inv{background:#fff;color:#000}
 .end-t.sm{font-size:clamp(46px,9.5vw,130px)}
 .pay{margin-top:20px;min-height:420px;border:1px solid #fff}
@@ -634,7 +635,7 @@ const PROJECTS = {
 const TIERS = [
   { id: "starter", price: "$139", name: "Mentoring Starter", popular: false,
     features: ["3 one-on-one sessions, 60 minutes each", "One at the start, one in the middle, one at the end", "Schedule template included", "No weekly journal"] },
-  { id: "mentoring", price: "$250", name: "Mentoring", popular: true,
+  { id: "mentoring", price: "$219", name: "Mentoring", popular: true,
     features: ["5 weeks, one 60 minute session every week", "Week 1. Goals, ambitions and schedule", "Week 2. Creative mindset", "Week 3. Physical health", "Week 4. Projects", "Week 5. Final reflection", "Weekly journal with my feedback", "Adjusted to your liking"] },
   { id: "premium", price: "$379", name: "Mentoring Premium", popular: false,
     features: ["Fully custom, made to your liking", "Up to 8 one-on-one meetings", "You pick the topics and the timing"] }
@@ -709,7 +710,7 @@ $$("[data-img]").forEach(e=>{const im=IMAGES.find(x=>x.id===e.dataset.img)||{lab
   const fc=e.parentElement.querySelector(".figcap");if(fc&&im.cap)fc.textContent+=" / "+im.cap;
   if(im.src){const i=new Image();i.alt=im.cap||im.label;i.src=im.src;e.insertBefore(i,e.firstChild)}
   else e.insertAdjacentHTML("afterbegin",`<span class="ph cap">${esc(im.label)}</span>`)});
-$("#cards").innerHTML=TIERS.map(t=>`<button class="card" data-tier="${t.id}">${t.popular?`<span class="tag cap">Most popular</span>`:""}<span class="cap">${esc(t.name)}</span><span class="D p">${esc(t.price)}</span><ul>${t.features.map(f=>`<li>${esc(f)}</li>`).join("")}</ul><span class="go cap"><span>Apply</span><span>${esc(t.name)}</span></span></button>`).join("");
+$("#cards").innerHTML=TIERS.map(t=>`<button class="card" data-tier="${t.id}">${t.popular?`<span class="tag cap">Most popular</span>`:""}<span class="cap">${esc(t.name)}</span><span class="D p">${esc(t.price)}</span>${t.was?`<span class="cap was">Regular price <s>${esc(t.was)}</s></span>`:""}<ul>${t.features.map(f=>`<li>${esc(f)}</li>`).join("")}</ul><span class="go cap"><span>Apply</span><span>${esc(t.name)}</span></span></button>`).join("");
 
 /* ---------- text splitting ---------- */
 function splitChars(scope){let n=0;$$("[data-chars]",scope).forEach(e=>{const t=e.textContent;e.setAttribute("aria-label",t);e.innerHTML=t.split("").map(c=>c===" "?" ":`<span class="ch" aria-hidden="true"><i style="--i:${n++}">${c}</i></span>`).join("")})}
